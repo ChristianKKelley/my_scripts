@@ -1,0 +1,10 @@
+#!/bin/sh
+
+SPOT=$(ls $HOME/Music/deemix_music/ | dmenu -i -l 50 | awk '{print $0}')
+echo $SPOT
+SPO=$(escapify "$SPOT")
+echo $SPO
+echo hello
+SPOL=$(echo $SPO | awk 'BEGIN{loc="$HOME/Music/deemix_music/"}{str = loc $0 "/album.txt"; print str}')
+echo $SPOL
+echo mpv --playlist=$SPOL | bash

@@ -1,0 +1,4 @@
+#!/bin/bash
+
+read var1
+youtube-dl -x -f bestaudio/best "$var1"
