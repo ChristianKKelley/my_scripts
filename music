@@ -1,10 +1,24 @@
 #!/bin/sh
 
-SPOT=$(ls $HOME/Music/deemix_music/ | dmenu -i -l 50 | awk '{print $0}')
-echo $SPOT
-SPO=$(escapify "$SPOT")
-echo $SPO
-echo hello
-SPOL=$(echo $SPO | awk 'BEGIN{loc="$HOME/Music/deemix_music/"}{str = loc $0 "/album.txt"; print str}')
+#handy dmenu script for dealing with albums in mpv, and if a particular album has CD folders, accessing those different CDs.  This script assumes you have an 'album.txt' file in any directory where there is music to be played.  To generate this, run the `alg` script in a given directory.  You also need `dmenu` and `escapify` (escapify is a single C file, which can be compiled into a binary easy).
+
+#In addition, the `touch` lines touch the album directory, which means if you list out the contents of your music folder directory (for me, deemix_music) in time order, `ls -ltr`, then it will show the most recent albums you've played.
+
+SPOT=$(ls $HOME/Music/deemix_music/ | dmenu -i -l 10 | awk '{print $0}')
+touch "$HOME/Music/deemix_music/$SPOT/"
+SPOL=$(echo $HOME/Music/deemix_music/$SPOT/album.txt)
+if test -f "$SPOL";
+then
+	echo all_clear
+else
+	#this is sort of a dumb way to write it, but it works (see line 6 for a better way)
+	SPOLT=$(echo $SPOT | awk 'BEGIN{loc="/home/christiank/Music/deemix_music/"}{str = loc $O "/"; print str}')
+	SPOTT=$(ls "$SPOLT" | dmenu -i -l 10 | awk '{print $0}')
+	touch "$SPOLT$SPOTT/"
+	SPOL=$(echo $SPOLT$SPOTT/album.txt)
+fi
+
 echo $SPOL
-echo mpv --playlist=$SPOL | bash
+SPAL=$(escapify "$SPOL")
+#for mpv, the playlist name NEEDS to be escapified - I couldn't get it to work with quotes or anything
+echo mpv --playlist=$SPAL | bash
