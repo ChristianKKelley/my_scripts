@@ -4,6 +4,8 @@
 
 #In addition, the `touch` lines touch the album directory, which means if you list out the contents of your music folder directory (for me, deemix_music) in time order, `ls -ltr`, then it will show the most recent albums you've played.
 
+#Added a `cat "$SPOL"`, so that you can see the track list while listening
+
 SPOT=$(ls $HOME/Music/deemix_music/ | dmenu -i -l 10 | awk '{print $0}')
 touch "$HOME/Music/deemix_music/$SPOT/"
 SPOL=$(echo $HOME/Music/deemix_music/$SPOT/album.txt)
@@ -21,4 +23,5 @@ fi
 echo $SPOL
 SPAL=$(escapify "$SPOL")
 #for mpv, the playlist name NEEDS to be escapified - I couldn't get it to work with quotes or anything
+cat "$SPOL"
 echo mpv --playlist=$SPAL | bash
