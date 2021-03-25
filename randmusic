@@ -1,0 +1,25 @@
+#!/bin/sh
+
+ALBU=$(ls $HOME/Music/deemix_music/ | shuf -n 1)
+ALBUM=$(echo $HOME/Music/deemix_music/$ALBU)
+echo album
+echo $ALBUM
+HOLD="/album.txt"
+echo $ALBUM$HOLD
+SPOL=$(echo $ALBUM$HOLD)
+touch "$ALBUM/"
+echo $SPOL
+if test -f "$SPOL";
+then
+	echo all_clear
+else
+	SPOTT=$(ls "$ALBUM" | dmenu -i -l 10 | awk '{print $0}')
+	touch "$ALBUM$SPOTT/"
+	SPOL=$(echo $ALBUM$SPOTT/album.txt)
+fi
+
+echo $SPOL
+SPAL=$(escapify "$SPOL")
+
+cat "$SPOL"
+echo mpv --playlist=$SPAL | bash
