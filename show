@@ -1,0 +1,45 @@
+#!/bin/sh
+
+USB="/run/media/christiank/098B-FC10/shows/"
+
+CHOICE=$(cat $HOME/local/bin/media_choices | dmenu -i -l 10 | awk '{print $0}')
+
+case $CHOICE in
+
+	local_drive)
+		SPOT=$(ls $HOME/shows/ | dmenu -i -l 10 | awk '{print $0}')
+		SPOL=$(echo $HOME/shows/$SPOT/album.txt)
+		if test -f "$SPOL";
+		then
+			SPOR=$(escapify "$SPOL")
+			echo mpv --playlist=$SPOR | bash
+		else
+			SPOTA=$(ls "$HOME/shows/$SPOT/" | dmenu -i -l 10 | awk '{print $0}')
+			SPOLA=$(echo $HOME/shows/$SPOT/$SPOTA/album.txt)
+			SPOR=$(escapify "$SPOLA")
+			echo $SPOR
+			echo mpv --playlist=$SPOR | bash
+		fi
+		;;
+
+	Media_USB)
+		echo "hello"
+		#choose show
+		SPOT=$(ls $USB | dmenu -i -l 10 | awk '{print $0}')
+		SPOL=$(echo $USB$SPOT/album.txt)
+		if test -f "$SPOL";
+		then
+			echo mpv --playlist=$SPOL | bash
+		else
+			SPOTA=$(ls "$USB$SPOT/" | dmenu -i -l 10 | awk '{print $0}')
+			SPOLA=$(echo "$USB$SPOT/$SPOTA/album.txt")
+			SPOR=$(escapify "$SPOLA")
+			echo $SPOR
+			echo mpv --playlist=$SPOR | bash
+		fi
+		;;
+
+	*)
+		echo -n "unknown"
+		;;
+esac

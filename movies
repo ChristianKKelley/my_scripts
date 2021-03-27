@@ -1,0 +1,32 @@
+#!/bin/sh
+
+USB="/run/media/christiank/098B-FC10/movies/"
+
+CHOICE=$(cat $HOME/local/bin/media_choices | dmenu -i -l 10 | awk '{print $0}')
+
+case $CHOICE in
+
+	local_drive)
+		SPOT=$(ls $HOME/movies/ | dmenu -i -l 10 | awk '{print $0}')
+		SPOLL=$(ls "$HOME/movies/$SPOT/" | dmenu -i -l 10 | awk '{print $0}')
+		SPOL=$(echo $HOME/movies/$SPOT/$SPOLL)
+		SPAL=$(escapify "$SPOL")
+		echo mpv $SPAL | bash
+		;;
+	
+	Media_USB)
+		SPOT=$(ls $USB | dmenu -i -l 10 | awk '{print $0}')
+		SPOLL=$(ls "$USB$SPOT" | dmenu -i -l 10 | awk '{print $0}')
+		SPOL=$(echo $USB$SPOT/$SPOLL)
+		SPAL=$(escapify "$SPOL")
+		echo mpv $SPAL | bash
+		;;
+	
+	*)
+		echo -n "unknown"
+		;;
+
+esac
+		
+
+
